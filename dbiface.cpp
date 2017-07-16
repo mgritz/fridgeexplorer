@@ -1,6 +1,6 @@
 #include "dbiface.hpp"
 
-DatabaseInterface::DatabaseInterface()
+DatabaseInterface::DatabaseInterface(std::string database_path)
 {
 
 }
