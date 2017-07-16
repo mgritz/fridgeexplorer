@@ -1,8 +1,10 @@
 #include <iostream>
-using namespace std;
+
+#include "dbiface.hpp"
 
 int main()
 {
-    cout << "Hello World" << endl;
+    std::cout << "Fridgeexplorer V0.0.1" << std::endl;
+
     return 0;
 }
