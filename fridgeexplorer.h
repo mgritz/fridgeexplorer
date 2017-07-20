@@ -15,6 +15,9 @@ public:
     explicit Fridgeexplorer(QWidget *parent = 0);
     ~Fridgeexplorer();
 
+protected:
+    void timerEvent(QTimerEvent *event);
+
 private:
     Ui::Fridgeexplorer *ui;
 };
