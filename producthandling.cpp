@@ -19,6 +19,7 @@ ProductHandling::~ProductHandling()
 
 void ProductHandling::searchBarcode()
 {
+    ui->label->setText(ui->line_barcode->text());
 }
 
 void ProductHandling::setMode(bool new_mode)
