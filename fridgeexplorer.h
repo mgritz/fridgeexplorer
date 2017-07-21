@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "producthandling.h"
+
 namespace Ui {
 class Fridgeexplorer;
 }
@@ -18,8 +20,14 @@ public:
 protected:
     void timerEvent(QTimerEvent *event);
 
+private slots:
+    void showProductHandling_add();
+    void showProductHandling_rem();
+
 private:
     Ui::Fridgeexplorer *ui;
+
+    ProductHandling* m_productHandler;
 };
 
 #endif // FRIDGEEXPLORER_H
