@@ -16,6 +16,7 @@ public:
     ~ProductHandling();
 
     void setMode(bool new_mode);
+    void show();
 
 private slots:
     void searchBarcode();

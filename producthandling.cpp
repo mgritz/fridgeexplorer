@@ -43,3 +43,12 @@ void ProductHandling::toggleMode()
         setMode(true);
 }
 
+void ProductHandling::show()
+{
+    // TODO This is not working yet.
+    // I want to set focus to the line edit every time I open this window.
+    // Also, it is not clearing the line edit - reckon this is not the method to be called by the show signal...
+    ui->line_barcode->clear();
+    QMainWindow::show();
+    ui->line_barcode->setFocus();
+}
