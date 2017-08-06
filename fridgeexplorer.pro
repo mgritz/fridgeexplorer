@@ -26,12 +26,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         fridgeexplorer.cpp \
-    producthandling.cpp
+    producthandling.cpp \
+    recipemanager.cpp
 
 HEADERS += \
         fridgeexplorer.h \
-    producthandling.h
+    producthandling.h \
+    recipemanager.h
 
 FORMS += \
         fridgeexplorer.ui \
-    producthandling.ui
+    producthandling.ui \
+    recipemanager.ui
