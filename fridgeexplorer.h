@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "producthandling.h"
+#include "recipemanager.h"
 
 namespace Ui {
 class Fridgeexplorer;
@@ -23,11 +24,13 @@ protected:
 private slots:
     void showProductHandling_add();
     void showProductHandling_rem();
+    void showRecipeManager();
 
 private:
     Ui::Fridgeexplorer *ui;
 
     ProductHandling* m_productHandler;
+    RecipeManager* m_recipeManager;
 };
 
 #endif // FRIDGEEXPLORER_H

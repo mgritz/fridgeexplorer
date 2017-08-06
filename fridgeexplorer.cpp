@@ -8,16 +8,27 @@ Fridgeexplorer::Fridgeexplorer(QWidget *parent) :
     ui(new Ui::Fridgeexplorer)
 {
     m_productHandler = new ProductHandling(this);
+    m_recipeManager = new RecipeManager(this);
 
     startTimer(1000);
     ui->setupUi(this);
+    // Controls for product handler window
     QObject::connect(ui->button_add, &QPushButton::clicked, this, &Fridgeexplorer::showProductHandling_add);
     QObject::connect(ui->button_remove, &QPushButton::clicked, this, &Fridgeexplorer::showProductHandling_rem);
-
+    // Controls for recipe management window
+    QObject::connect(ui->actionmanage_recipes, &QAction::triggered , this, &Fridgeexplorer::showRecipeManager);
 }
 
 Fridgeexplorer::~Fridgeexplorer()
 {
+    m_productHandler->close();
+    delete m_productHandler;
+    m_productHandler = NULL;
+
+    m_recipeManager->close();
+    delete m_recipeManager;
+    m_recipeManager = NULL;
+
     delete ui;
 }
 
@@ -36,4 +47,10 @@ void Fridgeexplorer::showProductHandling_rem()
 {
     m_productHandler->setMode(false);
     m_productHandler->show();
+}
+
+void Fridgeexplorer::showRecipeManager()
+{
+    // TODO Initialize the class correctly.
+    m_recipeManager->show();
 }

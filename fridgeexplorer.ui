@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>424</width>
-    <height>370</height>
+    <width>412</width>
+    <height>354</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,10 +73,18 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>424</width>
+     <width>412</width>
      <height>19</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionconnect_database"/>
+    <addaction name="actionmanage_recipes"/>
+   </widget>
+   <addaction name="menuFile"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -87,6 +95,16 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionconnect_database">
+   <property name="text">
+    <string>connect database ...</string>
+   </property>
+  </action>
+  <action name="actionmanage_recipes">
+   <property name="text">
+    <string>manage recipes</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
