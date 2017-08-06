@@ -1,0 +1,38 @@
+@startuml
+
+object recipes {
+    id = "RecipeID"
+    title = "Delicious Dinner"
+    location = "Mum's Cookbook p.66"
+    requiredTime = "90"
+    servingOptions = "0x01"
+    effort = "0x00"
+}
+
+object ingredients {
+    id = "IngredientID"
+    name = "dried cockroaches"
+    amountInStore = "100"
+    measue = "pcs"
+}
+
+object ingredient_usages {
+    id = "usageID"
+    reipe_using = "RecipeID"
+    ingredient = "IngredientID"
+    amount = "20"
+}
+
+object products {
+    eid = "ProductBarcode"
+    name = "Joe's Crunchy Insects - Dried Roaches 150g"
+    ingredient = "IngredientID"
+    amount = "200"
+    expiration "2100-01-01"
+}
+
+recipes "1" o-- "0..*" ingredient_usages
+ingredients "1" o-- "0..*" ingredient_usages
+ingredients "1" o-- "1..*" products
+
+@enduml
