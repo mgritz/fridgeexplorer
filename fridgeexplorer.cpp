@@ -58,6 +58,7 @@ Fridgeexplorer::~Fridgeexplorer()
 
 void Fridgeexplorer::timerEvent(QTimerEvent * event)
 {
+    (void)event;
     ui->label_time->setText(QTime::currentTime().toString("hh:mm:ss t"));
 }
 
