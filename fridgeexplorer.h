@@ -25,6 +25,7 @@ private slots:
     void showProductHandling_add();
     void showProductHandling_rem();
     void showRecipeManager();
+    void selectDatabase();
 
 private:
     Ui::Fridgeexplorer *ui;

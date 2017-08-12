@@ -4,6 +4,9 @@
 #include "globalsettings.h"
 
 #include <QDebug>
+#include <QDir>
+#include <QFileDialog>
+#include <QString>
 #include <QTime>
 
 Fridgeexplorer::Fridgeexplorer(QWidget *parent) :
@@ -30,6 +33,8 @@ Fridgeexplorer::Fridgeexplorer(QWidget *parent) :
     QObject::connect(ui->button_remove, &QPushButton::clicked, this, &Fridgeexplorer::showProductHandling_rem);
     // Controls for recipe management window
     QObject::connect(ui->actionmanage_recipes, &QAction::triggered , this, &Fridgeexplorer::showRecipeManager);
+    // Controls for database connector
+    QObject::connect(ui->actionconnect_database, &QAction::triggered, this, &Fridgeexplorer::selectDatabase);
 }
 
 Fridgeexplorer::~Fridgeexplorer()
@@ -72,4 +77,23 @@ void Fridgeexplorer::showRecipeManager()
 {
     // TODO Initialize the class correctly.
     m_recipeManager->show();
+}
+
+void Fridgeexplorer::selectDatabase()
+{
+    QString databasePath = globalSettings->value("database/path", QDir::homePath()).toString();
+
+    QFileDialog dialog(this);
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    dialog.setNameFilter("SQLite Database (*.db)");
+    dialog.setDirectory(databasePath.mid(databasePath.lastIndexOf("/")));
+    dialog.setViewMode(QFileDialog::Detail);
+    dialog.setAcceptMode(QFileDialog::AcceptOpen);
+
+    if (dialog.exec())
+        databasePath = dialog.selectedFiles().first();
+
+    globalSettings->setValue("database/path", databasePath);
+
+    // TODO acutally open the database.
 }
