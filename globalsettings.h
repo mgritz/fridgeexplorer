@@ -8,6 +8,6 @@
  * database/
  *  path : Full path to database file including filename.
  */
-QSettings* globalSettings;
+extern QSettings* globalSettings;
 
 #endif // GLOBALSETTINGS_H

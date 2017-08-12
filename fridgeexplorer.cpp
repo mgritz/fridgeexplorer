@@ -9,6 +9,8 @@
 #include <QString>
 #include <QTime>
 
+QSettings* globalSettings = NULL;
+
 Fridgeexplorer::Fridgeexplorer(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Fridgeexplorer)
