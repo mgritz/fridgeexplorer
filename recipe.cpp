@@ -23,5 +23,8 @@ bool Recipe::registerIngredient(const QString& ingredient, const int amount)
 
 void Recipe::fillOutUi(Ui::RecipeManager *ui)
 {
-
+    qDebug() << "Filling UI for " << m_title;
+    ui->line_title->setText(m_title);
+    ui->line_location->setText(m_location);
+    // TODO fill rest of UI with values
 }
