@@ -32,7 +32,8 @@ SOURCES += \
 HEADERS += \
         fridgeexplorer.h \
     producthandling.h \
-    recipemanager.h
+    recipemanager.h \
+    globalsettings.h
 
 FORMS += \
         fridgeexplorer.ui \

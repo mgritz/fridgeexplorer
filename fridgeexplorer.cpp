@@ -1,6 +1,9 @@
 #include "fridgeexplorer.h"
 #include "ui_fridgeexplorer.h"
 
+#include "globalsettings.h"
+
+#include <QDebug>
 #include <QTime>
 
 Fridgeexplorer::Fridgeexplorer(QWidget *parent) :
@@ -9,6 +12,16 @@ Fridgeexplorer::Fridgeexplorer(QWidget *parent) :
 {
     m_productHandler = new ProductHandling(this);
     m_recipeManager = new RecipeManager(this);
+
+    if (globalSettings == NULL)
+    {
+        globalSettings = new QSettings(QSettings::IniFormat,
+                                       QSettings::UserScope,
+                                       "openNom", "fridgeexplorer");
+        qDebug() << "Using INI file form " << globalSettings->fileName();
+    } else {
+        qWarning() << "INI file already installed.";
+    }
 
     startTimer(1000);
     ui->setupUi(this);
@@ -28,6 +41,12 @@ Fridgeexplorer::~Fridgeexplorer()
     m_recipeManager->close();
     delete m_recipeManager;
     m_recipeManager = NULL;
+
+    if (globalSettings != NULL)
+    {
+        globalSettings->sync();
+        delete globalSettings;
+    }
 
     delete ui;
 }
