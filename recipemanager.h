@@ -2,6 +2,7 @@
 #define RECIPEMANAGER_H
 
 #include <QMainWindow>
+#include <QListWidgetItem>
 
 namespace Ui {
 class RecipeManager;
@@ -16,6 +17,9 @@ public:
     ~RecipeManager();
 
     void show();
+
+public slots:
+    void showRecipeDetails(QListWidgetItem* item);
 
 private:
     Ui::RecipeManager *ui;

@@ -58,6 +58,25 @@ QMap<QString, int> DatabaseInterface::listFridgeContents(void)
 
 Recipe* DatabaseInterface::loadRecipe(QString name)
 {
+    qDebug() << "Querying for recipe " << name;
 
+    QSqlQuery query;
+     query.prepare("SELECT * FROM recipes WHERE title = (:title);");
+     query.bindValue(":title", name);
+
+     if(!query.exec())
+     {
+         qDebug() << "Failed to query database for " << name;
+         return nullptr;
+     }
+
+     query.first();
+     QString location = query.value(2).toString();
+
+     // TODO fill the following with reinterpreted return values from the database
+     QSet<serving_options_type> serving;
+     QSet<effort_options_type> effort;
+
+     return new Recipe(name, location, serving, effort, this);
 }
 

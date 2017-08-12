@@ -9,6 +9,7 @@ RecipeManager::RecipeManager(QWidget *parent) :
     ui(new Ui::RecipeManager)
 {
     ui->setupUi(this);
+    QObject::connect(ui->list_recipes, &QListWidget::itemClicked, this, &RecipeManager::showRecipeDetails);
 }
 
 RecipeManager::~RecipeManager()
@@ -23,4 +24,18 @@ void RecipeManager::show()
         ui->list_recipes->addItems(db.listRecipies());
 
     QMainWindow::show();
+}
+
+void RecipeManager::showRecipeDetails(QListWidgetItem* item)
+{
+    DatabaseInterface db(globalSettings->value("database/path", "").toString(), this);
+    if (db.isValid())
+    {
+        Recipe* selectedRecipe = db.loadRecipe(item->text());
+        if (selectedRecipe != nullptr)
+        {
+            selectedRecipe->fillOutUi(ui);
+            delete selectedRecipe;
+        }
+    }
 }
