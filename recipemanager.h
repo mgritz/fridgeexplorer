@@ -15,6 +15,8 @@ public:
     explicit RecipeManager(QWidget *parent = 0);
     ~RecipeManager();
 
+    void show();
+
 private:
     Ui::RecipeManager *ui;
 };

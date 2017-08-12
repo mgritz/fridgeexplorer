@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -27,13 +27,17 @@ SOURCES += \
         main.cpp \
         fridgeexplorer.cpp \
     producthandling.cpp \
-    recipemanager.cpp
+    recipemanager.cpp \
+    databaseinterface.cpp \
+    recipe.cpp
 
 HEADERS += \
         fridgeexplorer.h \
     producthandling.h \
     recipemanager.h \
-    globalsettings.h
+    globalsettings.h \
+    databaseinterface.h \
+    recipe.h
 
 FORMS += \
         fridgeexplorer.ui \
