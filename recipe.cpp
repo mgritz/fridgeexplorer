@@ -20,11 +20,6 @@ Recipe::Recipe(const QString& name,
     m_effort = effort;
 }
 
-bool Recipe::registerIngredient(const QString& ingredient, const int amount)
-{
-    return false;
-}
-
 void Recipe::fillOutUi(Ui::RecipeManager *ui)
 {
     qDebug() << "Filling UI for " << m_title;
@@ -85,6 +80,16 @@ void Recipe::fillOutUi(Ui::RecipeManager *ui)
         default:
             qDebug() << "unknown effort type " << it_e.peekPrevious();
         }
+    }
+
+    // list all ingredients
+    ui->textEdit_ingredients->clear();
+    for (auto it = m_ingredients.begin(); it != m_ingredients.end(); ++it)
+    {
+        QString line;
+        line += QString::number(it->amount).rightJustified(5,' ') + " "
+                + it->measure.rightJustified(5,' ') + " " + it->name + "\n";
+        ui->textEdit_ingredients->insertPlainText(line);
     }
 }
 

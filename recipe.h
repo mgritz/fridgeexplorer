@@ -21,6 +21,14 @@ typedef enum{
     EFFORT_WAITING
 } effort_options_type;
 
+
+typedef struct{
+    int ingredientID;
+    QString name;
+    int amount;
+    QString measure;
+} ingredient_type;
+
 class Recipe : public QObject
 {
     Q_OBJECT
@@ -33,7 +41,8 @@ public:
                     const QSet<effort_options_type> effort,
                     QObject *parent = nullptr);
 
-    bool registerIngredient(const QString& ingredient, const int amount);
+    void registerIngredient(const ingredient_type ingredient) { m_ingredients.append(ingredient); }
+    QList<ingredient_type> ingredientList(void) const { return m_ingredients; }
 
     void fillOutUi(Ui::RecipeManager *ui);
 
@@ -44,7 +53,7 @@ private:
     int m_requiredTime;
     QSet<serving_options_type> m_serving;
     QSet<effort_options_type> m_effort;
-    QMap<QString, int> m_ingredients;
+    QList<ingredient_type> m_ingredients;
 };
 
 #endif // RECIPE_H

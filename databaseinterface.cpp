@@ -69,16 +69,64 @@ Recipe* DatabaseInterface::loadRecipe(QString name)
 
     if(!query.exec())
     {
-        qDebug() << "Failed to query database for " << name;
+        qDebug() << "Failed to query database for recipe named" << name;
         return nullptr;
     }
+
+    // load first matching entry.
     query.first();
     QString location = query.value(2).toString();
     QSet<serving_options_type> serving = decodeServing(query.value(3).toInt());
     int time = query.value(4).toInt();
     QSet<effort_options_type> effort = decodeEffort(query.value(5).toInt());
 
-    return new Recipe(name, location, time, serving, effort, this);
+    Recipe* recipe = new Recipe(name, location, time, serving, effort, this->parent());
+
+    // load ingredients
+    //    first, load ingredient usages
+    int recipeID = query.value(0).toInt();
+
+    query.prepare("SELECT * FROM ingredient_usages WHERE recipe_using = (:recipeID);");
+    query.bindValue(":recipeID", recipeID);
+
+    if(!query.exec())
+    {
+        qDebug() << "Failed to query database for ingredient_usages by " << name << ", id is " << recipeID;
+        return nullptr;
+    }
+
+    QMap<int, int> ingredientIDtoAmount;
+    query.first();
+    do
+    {
+        ingredientIDtoAmount.insert(query.value(1).toInt(), query.value(3).toInt());
+    } while(query.next());
+
+    //    second, explore what ingredients are acutally used
+
+    qDebug() << "This recipe uses: ";
+    for (auto it = ingredientIDtoAmount.begin(); it != ingredientIDtoAmount.end(); ++it)
+    {
+        query.prepare("SELECT * FROM ingredients WHERE id = (:ingredientID);");
+        query.bindValue(":ingredientID", it.key());
+        if(!query.exec())
+            qDebug() << "Failed to query database for ingredient with id " << it.key();
+        else
+        {
+            query.first();
+            ingredient_type new_ingredient = {
+                .ingredientID = it.key(),
+                .name = query.value(1).toString(),
+                .amount = it.value(),
+                .measure = query.value(2).toString()
+            };
+            qDebug() << "     " << new_ingredient.amount << new_ingredient.measure << " of " << new_ingredient.name;
+            // store that information in the recipe.
+            recipe->registerIngredient(new_ingredient);
+        }
+    }
+
+    return recipe;
 }
 
 QSet<serving_options_type> DatabaseInterface::decodeServing(int servingField)
