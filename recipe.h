@@ -9,16 +9,16 @@
 #include "recipemanager.h"
 
 typedef enum{
-    SERVE_DESSERT = 0x10,
-    SERVE_TAKE = 0x08,
-    SERVE_DINNER = 0x04,
-    SERVE_LUNCH = 0x02,
-    SERVE_BREAKFAST = 0x01
+    SERVE_DESSERT,
+    SERVE_TAKE,
+    SERVE_DINNER,
+    SERVE_LUNCH,
+    SERVE_BREAKFAST
 } serving_options_type;
 
 typedef enum{
-    EFFORT_DIFFICULT = 0x02,
-    EFFORT_WAITING = 0x01
+    EFFORT_DIFFICULT,
+    EFFORT_WAITING
 } effort_options_type;
 
 class Recipe : public QObject
@@ -28,6 +28,7 @@ public:
     /** defines Recipe from arguments */
     explicit Recipe(const QString& name,
                     const QString& location,
+                    const int requiredTime,
                     const QSet<serving_options_type> serving,
                     const QSet<effort_options_type> effort,
                     QObject *parent = nullptr);
@@ -38,13 +39,12 @@ public:
 
 private:
     int m_id;
-   QString m_title;
-   QString m_location;
-   int m_requiredTime;
-   QSet<serving_options_type> m_serving;
-   QSet<effort_options_type> m_effort;
-
-   QMap<QString, int> m_ingredients;
+    QString m_title;
+    QString m_location;
+    int m_requiredTime;
+    QSet<serving_options_type> m_serving;
+    QSet<effort_options_type> m_effort;
+    QMap<QString, int> m_ingredients;
 };
 
 #endif // RECIPE_H

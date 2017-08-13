@@ -5,6 +5,9 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 
+QMap<serving_options_type, int> DatabaseInterface::servigToBits = populateServing();
+QMap<effort_options_type, int> DatabaseInterface::effortToBits = populateEffort();
+
 DatabaseInterface::DatabaseInterface(const QString &path, QObject *parent)
     : QObject(parent)
 {
@@ -69,14 +72,68 @@ Recipe* DatabaseInterface::loadRecipe(QString name)
          qDebug() << "Failed to query database for " << name;
          return nullptr;
      }
-
      query.first();
      QString location = query.value(2).toString();
+     QSet<serving_options_type> serving = decodeServing(query.value(3).toInt());
+     int time = query.value(4).toInt();
+     QSet<effort_options_type> effort = decodeEffort(query.value(5).toInt());
 
-     // TODO fill the following with reinterpreted return values from the database
-     QSet<serving_options_type> serving;
-     QSet<effort_options_type> effort;
+     return new Recipe(name, location, time, serving, effort, this);
+}
 
-     return new Recipe(name, location, serving, effort, this);
+QSet<serving_options_type> DatabaseInterface::decodeServing(int servingField)
+{
+    QSet<serving_options_type> retval;
+    for (auto it = servigToBits.begin(); it != servigToBits.end(); ++it)
+        if(it.value() & servingField)
+            retval.insert(it.key());
+
+    return retval;
+}
+
+int DatabaseInterface::encodeServing(QSet<serving_options_type> servigOptions)
+{
+    int retval = 0;
+    for (auto it = servigOptions.begin(); it != servigOptions.end(); ++it)
+        retval |= servigToBits[*it];
+
+    return retval;
+}
+
+QSet<effort_options_type> DatabaseInterface::decodeEffort(int effortField)
+{
+    QSet<effort_options_type> retval;
+    for (auto it = effortToBits.begin(); it != effortToBits.end(); ++it)
+        if(it.value() & effortField)
+            retval.insert(it.key());
+    return retval;
+}
+
+int DatabaseInterface::encodeEffort(QSet<effort_options_type> effortOptions)
+{
+    int retval = 0;
+    for (auto it = effortOptions.begin(); it != effortOptions.end(); ++it)
+        retval |= effortToBits[*it];
+
+    return retval;
+}
+
+QMap<serving_options_type, int> DatabaseInterface::populateServing()
+{
+    QMap<serving_options_type, int> retval;
+    retval.insert(SERVE_BREAKFAST, 0x01);
+    retval.insert(SERVE_LUNCH, 0x02);
+    retval.insert(SERVE_DINNER, 0x04);
+    retval.insert(SERVE_TAKE, 0x08);
+    retval.insert(SERVE_DESSERT, 0x10);
+    return retval;
+}
+
+QMap<effort_options_type, int> DatabaseInterface::populateEffort()
+{
+    QMap<effort_options_type, int> retval;
+    retval.insert(EFFORT_WAITING, 0x01);
+    retval.insert(EFFORT_DIFFICULT, 0x02);
+    return retval;
 }
 
