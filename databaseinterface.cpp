@@ -64,21 +64,21 @@ Recipe* DatabaseInterface::loadRecipe(QString name)
     qDebug() << "Querying for recipe " << name;
 
     QSqlQuery query;
-     query.prepare("SELECT * FROM recipes WHERE title = (:title);");
-     query.bindValue(":title", name);
+    query.prepare("SELECT * FROM recipes WHERE title = (:title);");
+    query.bindValue(":title", name);
 
-     if(!query.exec())
-     {
-         qDebug() << "Failed to query database for " << name;
-         return nullptr;
-     }
-     query.first();
-     QString location = query.value(2).toString();
-     QSet<serving_options_type> serving = decodeServing(query.value(3).toInt());
-     int time = query.value(4).toInt();
-     QSet<effort_options_type> effort = decodeEffort(query.value(5).toInt());
+    if(!query.exec())
+    {
+        qDebug() << "Failed to query database for " << name;
+        return nullptr;
+    }
+    query.first();
+    QString location = query.value(2).toString();
+    QSet<serving_options_type> serving = decodeServing(query.value(3).toInt());
+    int time = query.value(4).toInt();
+    QSet<effort_options_type> effort = decodeEffort(query.value(5).toInt());
 
-     return new Recipe(name, location, time, serving, effort, this);
+    return new Recipe(name, location, time, serving, effort, this);
 }
 
 QSet<serving_options_type> DatabaseInterface::decodeServing(int servingField)
