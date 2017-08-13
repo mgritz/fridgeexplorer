@@ -45,6 +45,7 @@ public:
     QList<ingredient_type> ingredientList(void) const { return m_ingredients; }
 
     void fillOutUi(Ui::RecipeManager *ui);
+    void ingredientsSetAvailability(Ui::RecipeManager *ui, const QMap<int, bool>& ingredientIDtoAvailability);
 
 private:
     int m_id;

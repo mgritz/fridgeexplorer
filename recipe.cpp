@@ -93,3 +93,25 @@ void Recipe::fillOutUi(Ui::RecipeManager *ui)
     }
 }
 
+void Recipe::ingredientsSetAvailability(Ui::RecipeManager *ui, const QMap<int, bool>& ingredientIDtoAvailability)
+{
+    // list all ingredients
+    ui->textEdit_ingredients->clear();
+    for (auto it = m_ingredients.begin(); it != m_ingredients.end(); ++it)
+    {
+        QString line;
+
+        if (!ingredientIDtoAvailability[it->ingredientID])
+            line += "<font color=\"red\">";
+
+        line += QString::number(it->amount).rightJustified(5,' ') + " "
+                + it->measure.rightJustified(5,' ') + " " + it->name;
+
+        if (!ingredientIDtoAvailability[it->ingredientID])
+            line += "</font>";
+
+        line += "<br>";
+        ui->textEdit_ingredients->insertPlainText(line);
+    }
+}
+
