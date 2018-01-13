@@ -48,6 +48,13 @@ public:
     void displayOnWidget(QGroupBox* recipeDetailsWidget);
     void ingredientsSetAvailability(const QMap<int, bool>& ingredientIDtoAvailability);
 
+    int getID(void) const { return m_id; }
+    QString getTitle(void) const { return m_title; }
+    QString getLocation(void) const { return m_location; }
+    int getRequiredTime(void) const { return m_requiredTime; }
+    QSet<serving_options_type> getServingOptions(void) const { return m_serving; }
+    QSet<effort_options_type> getEffort(void) const { return m_effort; }
+
 private:
     int m_id;
     QString m_title;
