@@ -20,44 +20,46 @@ Recipe::Recipe(const QString& name,
     m_effort = effort;
 }
 
-void Recipe::fillOutUi(Ui::RecipeManager *ui)
+void Recipe::displayOnWidget(QGroupBox* recipeDetailsWidget)
 {
+    m_rdWidget.setupUi(recipeDetailsWidget);
+
     qDebug() << "Filling UI for " << m_title;
-    ui->line_title->setText(m_title);
-    ui->line_location->setText(m_location);
+    m_rdWidget.line_title->setText(m_title);
+    m_rdWidget.line_location->setText(m_location);
 
     // update duration buttons
     if (m_requiredTime <= 30)
-        ui->radio_is_quick->setChecked(true);
+        m_rdWidget.radio_is_quick->setChecked(true);
     else if (m_requiredTime <= 60)
-        ui->radio_is_normal->setChecked(true);
+        m_rdWidget.radio_is_normal->setChecked(true);
     else
-        ui->radio_is_slow->setChecked(true);
+        m_rdWidget.radio_is_slow->setChecked(true);
 
     // update serving checkboxes
-    ui->check_is_breakfast->setChecked(false);
-    ui->check_is_lunch->setChecked(false);
-    ui->check_is_dinner->setChecked(false);
-    ui->check_is_mobile->setChecked(false);
-    ui->check_is_dessert->setChecked(false);
+    m_rdWidget.check_is_breakfast->setChecked(false);
+    m_rdWidget.check_is_lunch->setChecked(false);
+    m_rdWidget.check_is_dinner->setChecked(false);
+    m_rdWidget.check_is_mobile->setChecked(false);
+    m_rdWidget.check_is_dessert->setChecked(false);
     QSetIterator<serving_options_type> it_s(m_serving);
     while (it_s.hasNext())
     {
         switch (it_s.next()) {
         case SERVE_DESSERT:
-            ui->check_is_dessert->setChecked(true);
+            m_rdWidget.check_is_dessert->setChecked(true);
             break;
         case SERVE_TAKE:
-            ui->check_is_mobile->setChecked(true);
+            m_rdWidget.check_is_mobile->setChecked(true);
             break;
         case SERVE_DINNER:
-            ui->check_is_dinner->setChecked(true);
+            m_rdWidget.check_is_dinner->setChecked(true);
             break;
         case SERVE_LUNCH:
-            ui->check_is_lunch->setChecked(true);
+            m_rdWidget.check_is_lunch->setChecked(true);
             break;
         case SERVE_BREAKFAST:
-            ui->check_is_breakfast->setChecked(true);
+            m_rdWidget.check_is_breakfast->setChecked(true);
             break;
         default:
             qDebug() << "unknown serving type " << it_s.peekPrevious();
@@ -65,17 +67,17 @@ void Recipe::fillOutUi(Ui::RecipeManager *ui)
     }
 
     // update effort checkboxes
-    ui->check_is_difficult->setChecked(false);
-    ui->check_needs_waiting->setChecked(false);
+    m_rdWidget.check_is_difficult->setChecked(false);
+    m_rdWidget.check_needs_waiting->setChecked(false);
     QSetIterator<effort_options_type> it_e(m_effort);
     while (it_e.hasNext())
     {
         switch (it_e.next()) {
         case EFFORT_DIFFICULT:
-            ui->check_is_difficult->setChecked(true);
+            m_rdWidget.check_is_difficult->setChecked(true);
             break;
         case EFFORT_WAITING:
-            ui->check_needs_waiting->setChecked(true);
+            m_rdWidget.check_needs_waiting->setChecked(true);
             break;
         default:
             qDebug() << "unknown effort type " << it_e.peekPrevious();
@@ -83,20 +85,20 @@ void Recipe::fillOutUi(Ui::RecipeManager *ui)
     }
 
     // list all ingredients
-    ui->textEdit_ingredients->clear();
+    m_rdWidget.textEdit_ingredients->clear();
     for (auto it = m_ingredients.begin(); it != m_ingredients.end(); ++it)
     {
         QString line;
         line += QString::number(it->amount).rightJustified(5,' ') + " "
                 + it->measure.rightJustified(5,' ') + " " + it->name + "\n";
-        ui->textEdit_ingredients->insertPlainText(line);
+        m_rdWidget.textEdit_ingredients->insertPlainText(line);
     }
 }
 
-void Recipe::ingredientsSetAvailability(Ui::RecipeManager *ui, const QMap<int, bool>& ingredientIDtoAvailability)
+void Recipe::ingredientsSetAvailability(const QMap<int, bool>& ingredientIDtoAvailability)
 {
     // list all ingredients
-    ui->textEdit_ingredients->clear();
+    m_rdWidget.textEdit_ingredients->clear();
     for (auto it = m_ingredients.begin(); it != m_ingredients.end(); ++it)
     {
         QString line;
@@ -111,7 +113,7 @@ void Recipe::ingredientsSetAvailability(Ui::RecipeManager *ui, const QMap<int, b
             line += "</font>";
 
         line += "<br>";
-        ui->textEdit_ingredients->insertPlainText(line);
+        m_rdWidget.textEdit_ingredients->insertPlainText(line);
     }
 }
 

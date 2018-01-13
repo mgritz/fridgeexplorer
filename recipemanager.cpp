@@ -28,14 +28,41 @@ void RecipeManager::show()
 
 void RecipeManager::showRecipeDetails(QListWidgetItem* item)
 {
+    static Recipe* selectedRecipe = nullptr;
     DatabaseInterface db(globalSettings->value("database/path", "").toString(), this);
     if (db.isValid())
     {
-        Recipe* selectedRecipe = db.loadRecipe(item->text());
-        if (selectedRecipe != nullptr)
-        {
-            selectedRecipe->fillOutUi(ui);
-            delete selectedRecipe;
+        if (selectedRecipe != nullptr){
+            clearRecipeDetailsContainer();
+            selectedRecipe->deleteLater();
+        }
+
+        selectedRecipe = db.loadRecipe(item->text());
+
+        if (selectedRecipe != nullptr){
+            fillRecipeDetailsContainer(selectedRecipe);
         }
     }
+}
+
+
+void RecipeManager::clearRecipeDetailsContainer(void)
+{
+    if (ui->recipe_details_cont->layout() != nullptr)
+        delete ui->recipe_details_cont->layout();
+}
+
+void RecipeManager::fillRecipeDetailsContainer(Recipe* recipe)
+{
+    // If the container has no layout add one.
+    if (ui->recipe_details_cont->layout() == nullptr){
+        QHBoxLayout* newlayout = new QHBoxLayout(ui->recipe_details_cont);
+        ui->recipe_details_cont->setLayout(newlayout);
+    }
+    // Add the acutal container to the layout
+    QGroupBox* newcont = new QGroupBox(ui->recipe_details_cont);
+    ui->recipe_details_cont->layout()->addWidget(newcont);
+
+    // Initialize the recipe's detailed output there.
+    recipe->displayOnWidget(newcont);
 }

@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QListWidgetItem>
 
+class Recipe;
+
 namespace Ui {
 class RecipeManager;
 }
@@ -22,6 +24,8 @@ public slots:
     void showRecipeDetails(QListWidgetItem* item);
 
 private:
+    void clearRecipeDetailsContainer(void);
+    void fillRecipeDetailsContainer(Recipe *recipe);
     Ui::RecipeManager *ui;
 };
 

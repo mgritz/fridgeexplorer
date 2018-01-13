@@ -42,4 +42,5 @@ HEADERS += \
 FORMS += \
         fridgeexplorer.ui \
     producthandling.ui \
-    recipemanager.ui
+    recipemanager.ui \
+    recipewidget.ui

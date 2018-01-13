@@ -7,6 +7,7 @@
 #include <QMap>
 
 #include "recipemanager.h"
+#include "ui_recipewidget.h"
 
 typedef enum{
     SERVE_DESSERT,
@@ -44,8 +45,8 @@ public:
     void registerIngredient(const ingredient_type ingredient) { m_ingredients.append(ingredient); }
     QList<ingredient_type> ingredientList(void) const { return m_ingredients; }
 
-    void fillOutUi(Ui::RecipeManager *ui);
-    void ingredientsSetAvailability(Ui::RecipeManager *ui, const QMap<int, bool>& ingredientIDtoAvailability);
+    void displayOnWidget(QGroupBox* recipeDetailsWidget);
+    void ingredientsSetAvailability(const QMap<int, bool>& ingredientIDtoAvailability);
 
 private:
     int m_id;
@@ -55,6 +56,7 @@ private:
     QSet<serving_options_type> m_serving;
     QSet<effort_options_type> m_effort;
     QList<ingredient_type> m_ingredients;
+    Ui::RecipeDetails m_rdWidget;
 };
 
 #endif // RECIPE_H
