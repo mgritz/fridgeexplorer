@@ -19,6 +19,7 @@ RecipeManager::~RecipeManager()
 
 void RecipeManager::show()
 {
+    ui->list_recipes->clear();
     DatabaseInterface db(globalSettings->value("database/path", "").toString(), this);
     if (db.isValid())
         ui->list_recipes->addItems(db.listRecipies());

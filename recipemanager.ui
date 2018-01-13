@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>816</width>
+    <width>788</width>
     <height>576</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Recipe Manager</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -20,20 +20,21 @@
       <property name="title">
        <string>Recipe Database</string>
       </property>
-      <widget class="QListWidget" name="list_recipes">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>20</y>
-         <width>361</width>
-         <height>471</height>
-        </rect>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QListWidget" name="list_recipes"/>
+       </item>
+      </layout>
      </widget>
     </item>
     <item>
      <widget class="QWidget" name="recipe_details_cont" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>396</width>
+        <height>514</height>
+       </size>
+      </property>
       <layout class="QHBoxLayout" name="horizontalLayout_3"/>
      </widget>
     </item>
@@ -44,7 +45,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>816</width>
+     <width>788</width>
      <height>22</height>
     </rect>
    </property>
