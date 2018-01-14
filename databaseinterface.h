@@ -18,6 +18,7 @@ public:
     bool isValid() {return m_db_valid; }
     QStringList listRecipies(void);
     QMap<QString, int> listFridgeContents(void);
+    QStringList listIngredients(void);
     Recipe* loadRecipe(QString name);
     bool storeRecipe(Recipe* newRecipe);
 

@@ -59,6 +59,23 @@ QMap<QString, int> DatabaseInterface::listFridgeContents(void)
 
 }
 
+QStringList DatabaseInterface::listIngredients(void)
+{
+    qDebug() << "Prompting all ingredients...";
+
+    QSqlQuery query("SELECT class FROM ingredients;");
+
+    QStringList retval;
+    query.first();
+    do {
+        QString title = query.value(0).toString();
+        qDebug() << title;
+        retval.append(title);
+    } while (query.next());
+
+    return retval;
+}
+
 Recipe* DatabaseInterface::loadRecipe(QString name)
 {
     qDebug() << "Querying for recipe " << name;
