@@ -21,6 +21,7 @@ public:
     QStringList listIngredients(void);
     Recipe* loadRecipe(QString name);
     bool storeRecipe(Recipe* newRecipe);
+    bool addNewIngredient(ingredient_type ingr);
 
 private:
 

@@ -239,6 +239,34 @@ bool DatabaseInterface::storeRecipe(Recipe* newRecipe)
     return true;
 }
 
+bool DatabaseInterface::addNewIngredient(ingredient_type ingr)
+{
+    // check if ingredient is present.
+    QSqlQuery query;
+    query.prepare("SELECT MAX(id) FROM ingredients;");
+    if(!query.exec()){
+        qWarning() << "Failed to query db for max ingredient id";
+        return false;
+    }
+    query.first();
+    int newId = query.value(0).toInt() + 1;
+
+    query.prepare("INSERT INTO ingredients"
+                  " (id, class, measure) VALUES (:id, :class, :measure);");
+    query.bindValue(":id", newId);
+    query.bindValue(":class", ingr.name);
+    query.bindValue(":measure", ingr.measure);
+    if(!query.exec()){
+        qWarning() << "Adding ingredient id " << newId << " "
+                   << ingr.name << " failed";
+        return false;
+    }
+
+    qDebug() << "Added ingredient id " << newId << " " << ingr.name;
+    return true;
+}
+
+
 QSet<serving_options_type> DatabaseInterface::decodeServing(int servingField)
 {
     QSet<serving_options_type> retval;
