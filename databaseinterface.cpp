@@ -129,6 +129,100 @@ Recipe* DatabaseInterface::loadRecipe(QString name)
     return recipe;
 }
 
+bool DatabaseInterface::storeRecipe(Recipe* newRecipe)
+{
+    int targetRecipeKey = 0;
+    // Find ID of recipe. Don't reuse Recipe::m_id b/c it might have been modified since reading.
+    QSqlQuery query;
+    query.prepare("SELECT 1 FROM recipes WHERE title = (:title);");
+    query.bindValue(":title", newRecipe->getTitle());
+    if(!query.exec()){
+        qDebug() << "Failed to query database for recipe named" << newRecipe->getTitle();
+        return false;
+    }
+
+    if(query.first()){
+        targetRecipeKey = query.value(0).toInt();
+    } else {
+        // entry not yet present. Obtain free ID to add.
+        query.prepare("SELECT MAX(id) FROM recipes;");
+        if(!query.exec()){
+            qDebug() << "Failed to query db for max recipe id";
+            return false;
+        }
+        query.first();
+        targetRecipeKey = query.value(0).toInt() + 1;
+    }
+
+    // First, check and update ingredient usages.
+    foreach (ingredient_type ingr, newRecipe->ingredientList()){
+        int ingrUsageToUpdate = 0;
+
+        query.prepare("SELECT 1 FROM ingredient_usages"
+                      " WHERE ingredient = (:ingredientID)"
+                      " AND recipe_using = (:recipeID);");
+        query.bindValue(":ingredientID", ingr.ingredientID);
+        query.bindValue(":recipeID", targetRecipeKey);
+
+        if(!query.exec()){
+            qWarning() << "Failed to query ingredient_usages for entries"
+                        " connecting " << newRecipe->getTitle() << " to "
+                     << ingr.name;
+            return false;
+        }
+
+        if(query.first()){
+             ingrUsageToUpdate = query.value(0).toInt();
+        } else {
+            // entry not yet present. Obtain free ID to add.
+            query.prepare("SELECT MAX(id) FROM ingredient_usages;");
+            if(!query.exec()){
+                qWarning() << "Failed to query db for max ingredient_usages id";
+                return false;
+            }
+            query.first();
+            ingrUsageToUpdate = query.value(0).toInt() + 1;
+        }
+
+        query.prepare("REPLACE INTO ingredient_usages"
+                      " (id, ingredient, recipe_using, amount)"
+                      " VALUES (:id, :ingredient, :recipe, :amount);");
+        query.bindValue(":id", ingrUsageToUpdate);
+        query.bindValue(":ingredient", ingr.ingredientID);
+        query.bindValue(":recipe", targetRecipeKey);
+        query.bindValue(":amount", ingr.amount);
+        if(!query.exec()){
+            qWarning() << "Failed to update ingredient_usage "
+                        " connecting " << newRecipe->getTitle() << " to "
+                     << ingr.name;
+            return false;
+        }
+        qDebug() << "Updated ingredient_usage connecting "
+                 << newRecipe->getTitle() << " to " << ingr.name;
+    }
+
+    // Lastly insert or replace recipe
+    query.prepare("REPLACE INTO recipes"
+                  " (id, title, location, serves_for, time, effort)"
+                  " VALUES (:id, :title, :location, :serves_for, :time, :effort);");
+    query.bindValue(":id", targetRecipeKey);
+    query.bindValue(":title", newRecipe->getTitle());
+    query.bindValue(":location", newRecipe->getLocation());
+    query.bindValue(":serves_for", encodeServing(newRecipe->getServingOptions()));
+    query.bindValue(":time", newRecipe->getRequiredTime());
+    query.bindValue(":effort", encodeEffort(newRecipe->getEffort()));
+    if(!query.exec()){
+        qWarning() << "Updating recipe id " << targetRecipeKey << " "
+                   << newRecipe->getTitle() << " failed";
+        return false;
+    }
+
+    qDebug() << "Updated recipe id " << targetRecipeKey << " "
+             << newRecipe->getTitle();
+
+    return true;
+}
+
 QSet<serving_options_type> DatabaseInterface::decodeServing(int servingField)
 {
     QSet<serving_options_type> retval;

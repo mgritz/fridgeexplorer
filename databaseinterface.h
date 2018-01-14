@@ -19,6 +19,7 @@ public:
     QStringList listRecipies(void);
     QMap<QString, int> listFridgeContents(void);
     Recipe* loadRecipe(QString name);
+    bool storeRecipe(Recipe* newRecipe);
 
 private:
 
