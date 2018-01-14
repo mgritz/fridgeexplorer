@@ -29,7 +29,8 @@ SOURCES += \
     producthandling.cpp \
     recipemanager.cpp \
     databaseinterface.cpp \
-    recipe.cpp
+    recipe.cpp \
+    recipeeditor.cpp
 
 HEADERS += \
         fridgeexplorer.h \
@@ -37,10 +38,12 @@ HEADERS += \
     recipemanager.h \
     globalsettings.h \
     databaseinterface.h \
-    recipe.h
+    recipe.h \
+    recipeeditor.h
 
 FORMS += \
         fridgeexplorer.ui \
     producthandling.ui \
     recipemanager.ui \
-    recipewidget.ui
+    recipewidget.ui \
+    recipeeditor.ui
