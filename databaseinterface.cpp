@@ -67,8 +67,7 @@ Recipe* DatabaseInterface::loadRecipe(QString name)
     query.prepare("SELECT * FROM recipes WHERE title = (:title);");
     query.bindValue(":title", name);
 
-    if(!query.exec())
-    {
+    if(!query.exec()) {
         qDebug() << "Failed to query database for recipe named" << name;
         return nullptr;
     }
